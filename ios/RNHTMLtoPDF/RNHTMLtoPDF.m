@@ -116,8 +116,10 @@ RCT_EXPORT_METHOD(convert:(NSDictionary *)options
                                        alpha:1.0];
         }
     }
-
-    if (options[@"directory"] && [options[@"directory"] isEqualToString:@"Documents"]){
+    if(options[@"SPECIAL_DIRECTORY"]){
+        _filePath = [NSString stringWithFormat:@"%@/%@.pdf", options[@"SPECIAL_DIRECTORY"], _fileName];
+    }
+    else if (options[@"directory"] && [options[@"directory"] isEqualToString:@"Documents"]){
         NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
         NSString *documentsPath = [paths objectAtIndex:0];
 
