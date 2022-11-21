@@ -21,6 +21,7 @@ public class RNHTMLtoPDFModule extends ReactContextBaseJavaModule {
     private static final String HTML = "html";
     private static final String FILE_NAME = "fileName";
     private static final String DIRECTORY = "directory";
+    private static final String SPECIAL_DIRECTORY = "specialDirectory";
     private static final String BASE_64 = "base64";
     private static final String BASE_URL = "baseURL";
     private static final String HEIGHT = "height";
@@ -61,8 +62,13 @@ public class RNHTMLtoPDFModule extends ReactContextBaseJavaModule {
       } else {
         fileName = PDF_PREFIX + UUID.randomUUID().toString();
       }
-
-      if (options.hasKey(DIRECTORY)) {
+      // If we want to save to a specific directory visible to the user
+      if(options.hasKey(SPECIAL_DIRECTORY)){
+        String fullPath = options.getString(SPECIAL_DIRECTORY);
+        String fileNameNew = options.getString(FILE_NAME);
+        destinationFile = new File(fullPath, fileNameNew + PDF_EXTENSION);
+      }
+      else if (options.hasKey(DIRECTORY)) {
         String state = Environment.getExternalStorageState();
         File path = (Environment.MEDIA_MOUNTED.equals(state)) ?
           new File(mReactContext.getExternalFilesDir(null), options.getString(DIRECTORY)) :
